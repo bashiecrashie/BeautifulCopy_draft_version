@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"io"
+	"strings"
 )
 
 //Colors
@@ -68,8 +69,37 @@ func GetFileSize(FileName string)(int64){
 	return FileStat.Size()
 }
 
+func SeparateFileName(FileName string)(string){
+	FileNameLen := len(FileName)
+
+	var GetFileName, RevFileName []string
+    
+    var result string
+
+  	for i := FileNameLen-1; ;i--{
+    	    if strings.Compare(string(FileName[i]), "/") == 0{
+        	           break
+           	}
+           	GetFileName = append(GetFileName, string(FileName[i]))
+   	}
+
+   for i := len(GetFileName)-1; i >= 0; i--{
+           RevFileName = append(RevFileName, GetFileName[i])
+   }
+
+   result = strings.Join(RevFileName, "")
+
+   return result
+}
+
 func OpenFiles(SourceFile, DestinationPath string)(*os.File, *os.File, error){
-	DestinyFilePath := DestinationPath + SourceFile
+	
+	var DestinyFilePath string
+	if strings.Contains(SourceFile, "/") == true{
+		DestinyFilePath = DestinationPath + SeparateFileName(SourceFile)
+	}
+	DestinyFilePath = DestinationPath + SourceFile
+
 	_, DstFileCreateStatus := os.Create(DestinyFilePath)
 	if DstFileCreateStatus != nil{
 		return nil, nil, DstFileCreateStatus
