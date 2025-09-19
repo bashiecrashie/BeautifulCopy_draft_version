@@ -12,7 +12,13 @@ const WHITE = "\033[1;37m"
 const GREEN = "\033[1;32m"
 const RED = "\033[1;31m"
 const BLUE = "\033[1;34m"
-
+/*
+[*] File:SourceFile Destination:/usr/folder/destination Progress:34%-----\
+									 |
+									 |
+									\ /
+[+] File:SourceFile Destination:/usr/folder/destination Progress:COMPLETED									
+*/
 const KBYTE = 1000
 
 func main(){
@@ -93,13 +99,12 @@ func SeparateFileName(FileName string)(string){
 }
 
 func OpenFiles(SourceFile, DestinationPath string)(*os.File, *os.File, error){
-	
 	var DestinyFilePath string
 	if strings.Contains(SourceFile, "/") == true{
 		DestinyFilePath = DestinationPath + SeparateFileName(SourceFile)
+	}else{
+		DestinyFilePath = DestinationPath + SourceFile
 	}
-	DestinyFilePath = DestinationPath + SourceFile
-
 	_, DstFileCreateStatus := os.Create(DestinyFilePath)
 	if DstFileCreateStatus != nil{
 		return nil, nil, DstFileCreateStatus
